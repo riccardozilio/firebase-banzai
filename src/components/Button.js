@@ -11,11 +11,11 @@ const Button = (props) => {
           height="40px"
           lineHeight="1.2"
           transition="all 0.2s cubic-bezier(.08,.52,.52,1)"
-          bg="#ff6347"
-          color="white"
+          bg="white"
+          color="black"
           px="8px"
           borderRadius="10px"
-          fontSize="14px"
+          fontSize={props.fontSize ? props.fontSize : "14px"}
           fontWeight="semibold"
           onClick={props.onClick}
         >
@@ -27,14 +27,11 @@ const Button = (props) => {
           height="40px"
           lineHeight="1.2"
           transition="all 0.2s cubic-bezier(.08,.52,.52,1)"
-          border="1px"
           px="8px"
-          borderRadius="10px"
-          fontSize="14px"
+          fontSize={props.fontSize ? props.fontSize : "14px"}
           fontWeight="semibold"
-          borderColor="#ff6347"
-          color="#ff6347"
-          _hover={{ bg: "#ff6347", color: "white" }}
+          color="gray.400"
+          _hover={{ bg: "white", color: "black" }}
           onClick={props.onClick}
         >
           {props.text}

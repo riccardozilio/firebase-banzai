@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import Barcode from "react-barcode";
-import { Center, Text, Tag, GridItem, Box } from "@chakra-ui/react";
+import { Center, Text, Tag, GridItem, Box, Button } from "@chakra-ui/react";
 import { ChevronDownIcon, ChevronUpIcon } from "@chakra-ui/icons";
+import { DeleteIcon } from "@chakra-ui/icons";
 import moment from "moment";
-import Button from "./Button";
 
 const MangaCard = (props) => {
   const el = props.el;
@@ -45,6 +45,15 @@ const MangaCard = (props) => {
           <Text>
             scade il: {""} {moment(el.expire).format("DD-MM-yy")}
           </Text>
+          <Box d="flex" justifyContent="space-around" alignItems="center">
+            <Button colorScheme="blackAlpha" size="sm">
+              Modifica
+            </Button>
+            <Button colorScheme="blackAlpha" size="sm">
+              Ritirato
+            </Button>
+            <DeleteIcon w={6} h={6} color="gray.800" />
+          </Box>
         </>
       ) : (
         <>

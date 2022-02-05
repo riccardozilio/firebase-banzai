@@ -2,20 +2,16 @@ import React, { useEffect, useState } from "react";
 import { getDocs, collection } from "firebase/firestore";
 import { db, auth } from "../firebase-config";
 import ModalAdd from "../components/ModalAdd";
-import MangaCard from "../components/MangaCard";
+import Card from "../components/Card";
 import Button from "../components/Button";
 
 import {
   Center,
-  Text,
-  Tag,
   Grid,
-  background,
   Input,
+  Text,
   IconButton,
-  Radio,
-  RadioGroup,
-  Stack,
+  Avatar,
   Box,
 } from "@chakra-ui/react";
 import { SearchIcon } from "@chakra-ui/icons";
@@ -25,7 +21,7 @@ import moment from "moment";
 const Home = () => {
   const [mangasList, setMangasList] = useState([]);
   const [foodsList, setFoodsList] = useState([]);
-  const [value, setValue] = React.useState("manga");
+  const [value, setValue] = useState("manga");
   const [valueFilter, setValueFilter] = useState(1);
   const [modal, setModal] = useState(false);
   const mangasCollectionRef = collection(db, "mangas");
@@ -38,7 +34,7 @@ const Home = () => {
 
   const onClickFilter = (val) => {
     if (value === "manga") {
-      if (val != 0) {
+      if (val > 0) {
         setFilter(
           mangasList.filter(
             (manga) =>
@@ -74,15 +70,15 @@ const Home = () => {
   };
 
   // function to download data
+  const getMangas = async () => {
+    const data = await getDocs(mangasCollectionRef);
+    setMangasList(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+  };
+  const getFoods = async () => {
+    const data = await getDocs(foodsCollectionRef);
+    setFoodsList(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+  };
   useEffect(() => {
-    const getMangas = async () => {
-      const data = await getDocs(mangasCollectionRef);
-      setMangasList(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
-    };
-    const getFoods = async () => {
-      const data = await getDocs(foodsCollectionRef);
-      setFoodsList(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
-    };
     getMangas();
     getFoods();
   }, []);
@@ -90,7 +86,7 @@ const Home = () => {
   // first call filter function
   useEffect(() => {
     onClickFilter(1);
-  }, [mangasList, value]);
+  }, [mangasList, foodsList, value]);
 
   // function for the search filter
 
@@ -99,31 +95,97 @@ const Home = () => {
   };
   return (
     <div
-      style={{ minHeight: "100vh", padding: "1%", backgroundColor: "#3a3b3f" }}
+      style={{
+        cursor: "default",
+        minHeight: "100vh",
+        padding: "1%",
+        overflowX: "hidden",
+        // backgroundColor: "#3a3b3f",
+        fontFamily: "'Montserrat', sans-serif",
+      }}
     >
       {modal && (
         <ModalAdd
+          value={value}
           close={(props) => {
-            setModal(props);
+            setModal(props.modal);
+            if (props.manga) {
+              getMangas();
+            } else if (props.food) {
+              getFoods();
+            }
           }}
         />
       )}
-      <Center>
-        <Input
-          placeholder="cerca per utente o per titolo"
-          size="md"
-          w="20%"
-          mr="10px"
-          onChange={(event) => setSearch(event.target.value)}
-        />
-        <IconButton
-          aria-label="Search database"
-          icon={<SearchIcon />}
-          mr="10px"
-          onClick={() => searchFilter(search)}
-        />
-
-        <Stack direction="row" spacing={4} align="center">
+      {/* <img
+        src="https://www.banzai-dojo.it/sites/default/files/logoHome.png"
+        style={{
+          width: "150px",
+          position: "absolute",
+          bottom: "10px",
+          left: "10px",
+        }}
+      /> */}
+      <Box d="flex" w="100%" justifyContent="space-between">
+        <Center>
+          <Button
+            isActive={value == "manga" ? true : false}
+            fontSize="20"
+            text="Mangas"
+            onClick={() => setValue("manga")}
+          >
+            Mangas
+          </Button>
+          <Button
+            isActive={value == "food" ? true : false}
+            fontSize="20"
+            text="Foods"
+            onClick={() => setValue("food")}
+          ></Button>
+          <Button fontSize="20" text="Notes"></Button>
+        </Center>
+        {auth.currentUser && (
+          <Center>
+            <Text mr="5">{auth.currentUser.displayName}</Text>
+            <Avatar name={auth.currentUser.displayName} />
+          </Center>
+        )}
+      </Box>
+      <Box
+        d="flex"
+        w="100%"
+        alignItems="center"
+        justifyContent="space-between"
+        mt="40px"
+        px="6%"
+      >
+        <Center
+          bg="gray.400"
+          h="30px"
+          px="6"
+          float="left"
+          color="white"
+          fontSize="sm"
+          rounded="xl"
+          cursor="pointer"
+          onClick={() => setModal(true)}
+        >
+          aggiungi prodotto
+        </Center>
+        <Center float="right">
+          <Input
+            placeholder="cerca per utente o codice a barre"
+            size="md"
+            w="300px"
+            mr="10px"
+            onChange={(event) => setSearch(event.target.value)}
+          />
+          <IconButton
+            aria-label="Search database"
+            mr="10px"
+            icon={<SearchIcon />}
+            onClick={() => searchFilter(search)}
+          />
           <Button
             isActive={valueFilter == 1 ? true : false}
             onClick={() => onClickFilter(1)}
@@ -144,36 +206,31 @@ const Home = () => {
             onClick={() => onClickFilter(0)}
             text="scadute"
           ></Button>
-        </Stack>
-        <RadioGroup onChange={setValue} value={value}>
-          <Stack direction="row">
-            <Radio value="manga">manga</Radio>
-            <Radio value="food">food</Radio>
-          </Stack>
-        </RadioGroup>
-        {/* <Text>{auth.currentUser.displayName}</Text> */}
-      </Center>
-      <Grid d="flex" flexWrap="wrap" p="6" gap={6}>
+        </Center>
+      </Box>
+      <Grid
+        d="flex"
+        w="100%"
+        justifyContent="center"
+        flexWrap="wrap"
+        p="6"
+        gap={6}
+      >
         {filter.map((e) => {
-          return <MangaCard el={e} />;
+          return (
+            <Card
+              el={e}
+              close={(props) => {
+                if (props.manga) {
+                  getMangas();
+                } else if (props.food) {
+                  getFoods();
+                }
+              }}
+            />
+          );
         })}
       </Grid>
-
-      <div bg="red.900" w="90%" d="flex"></div>
-      <Center
-        bg="tomato"
-        h="50px"
-        w="50px"
-        color="white"
-        pos="fixed"
-        bottom="20px"
-        right="20px"
-        fontSize="2xl"
-        borderRadius="50%"
-        onClick={() => setModal(true)}
-      >
-        +
-      </Center>
     </div>
   );
 };
