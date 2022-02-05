@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/firebase-banzai/static/css/main.a17ad027.css",
+    "main.js": "/firebase-banzai/static/js/main.18132cc9.js",
+    "static/js/787.ffaebafc.chunk.js": "/firebase-banzai/static/js/787.ffaebafc.chunk.js",
+    "index.html": "/firebase-banzai/index.html",
+    "main.a17ad027.css.map": "/firebase-banzai/static/css/main.a17ad027.css.map",
+    "main.18132cc9.js.map": "/firebase-banzai/static/js/main.18132cc9.js.map",
+    "787.ffaebafc.chunk.js.map": "/firebase-banzai/static/js/787.ffaebafc.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.a17ad027.css",
+    "static/js/main.18132cc9.js"
+  ]
+}
