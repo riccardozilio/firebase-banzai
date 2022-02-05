@@ -1,5 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { BrowserRouter as Rowter, Routes, Route, Link } from "react-router-dom";
+import {
+  BrowserRouter as Rowter,
+  Routes,
+  Route,
+  Link,
+  HashRouter,
+} from "react-router-dom";
 import { ChakraProvider } from "@chakra-ui/react";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
@@ -12,7 +18,7 @@ function App() {
   }, [auth]);
   return (
     <ChakraProvider>
-      <Rowter>
+      <HashRouter>
         <Routes>
           <Route path="/" element={<Home auth={auth} />} />
 
@@ -27,7 +33,7 @@ function App() {
             }
           />
         </Routes>
-      </Rowter>
+      </HashRouter>
     </ChakraProvider>
   );
 }
