@@ -1,14 +1,10 @@
 import React, { useState, useEffect } from "react";
-import {
-  BrowserRouter as Rowter,
-  Routes,
-  Route,
-  Link,
-  HashRouter,
-} from "react-router-dom";
+import { BrowserRouter as Rowter, Routes, Route, Link } from "react-router-dom";
 import { ChakraProvider } from "@chakra-ui/react";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
+import Profile from "./pages/Profile";
+
 import "./index.css";
 
 function App() {
@@ -18,12 +14,13 @@ function App() {
   }, [auth]);
   return (
     <ChakraProvider>
-      <HashRouter>
+      <Rowter>
         <Routes>
-          <Route path="/" element={<Home auth={auth} />} />
+          <Route path="/home" element={<Home auth={auth} />} />
+          <Route path="/profile" element={<Profile />} />
 
           <Route
-            path="/login"
+            path="/"
             element={
               <Login
                 setIsAuth={(props) => {
@@ -33,7 +30,7 @@ function App() {
             }
           />
         </Routes>
-      </HashRouter>
+      </Rowter>
     </ChakraProvider>
   );
 }

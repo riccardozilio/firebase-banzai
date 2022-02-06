@@ -4,6 +4,7 @@ import { db, auth } from "../firebase-config";
 import ModalAdd from "../components/ModalAdd";
 import Card from "../components/Card";
 import Button from "../components/Button";
+import { useNavigate, Link } from "react-router-dom";
 
 import {
   Center,
@@ -19,6 +20,8 @@ import { SearchIcon } from "@chakra-ui/icons";
 import moment from "moment";
 
 const Home = () => {
+  let navigate = useNavigate();
+
   const [mangasList, setMangasList] = useState([]);
   const [foodsList, setFoodsList] = useState([]);
   const [value, setValue] = useState("manga");
@@ -29,6 +32,12 @@ const Home = () => {
 
   const [filter, setFilter] = useState([]);
   const [search, setSearch] = useState("");
+
+  useEffect(() => {
+    if (!auth.currentUser) {
+      navigate(`/`);
+    }
+  }, []);
 
   // filter for the preset button
 
@@ -147,7 +156,12 @@ const Home = () => {
         {auth.currentUser && (
           <Center>
             <Text mr="5">{auth.currentUser.displayName}</Text>
-            <Avatar name={auth.currentUser.displayName} />
+            <Link to="/profile">
+              <Avatar
+                name={auth.currentUser.displayName}
+                src={auth.currentUser.photoURL}
+              />
+            </Link>
           </Center>
         )}
       </Box>
@@ -159,19 +173,21 @@ const Home = () => {
         mt="40px"
         px="6%"
       >
-        <Center
+        <Box
           bg="gray.400"
           h="30px"
           px="6"
           float="left"
           color="white"
+          transition="all 0.2s cubic-bezier(.08,.52,.52,1)"
           fontSize="sm"
           rounded="xl"
           cursor="pointer"
+          _hover={{ bg: "gray.500" }}
           onClick={() => setModal(true)}
         >
           aggiungi prodotto
-        </Center>
+        </Box>
         <Center float="right">
           <Input
             placeholder="cerca per utente o codice a barre"

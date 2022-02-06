@@ -54,6 +54,7 @@ const Card = (props) => {
     });
     deleteManga();
     toast({
+      position: "top-right",
       title: "archiviazione riuscita.",
       description: "archiviazione manga avvenuta con successo",
       status: "success",
@@ -76,6 +77,7 @@ const Card = (props) => {
     });
     deleteFood();
     toast({
+      position: "top-right",
       title: "archiviazione riuscita.",
       description: "archiviazione food avvenuta con successo",
       status: "success",
@@ -140,6 +142,7 @@ const Card = (props) => {
                   if (el.title) {
                     deleteManga();
                     toast({
+                      position: "top-right",
                       title: "eliminazione riuscita.",
                       description:
                         "eliminazione del manga avvenuta con successo",
@@ -150,6 +153,7 @@ const Card = (props) => {
                   } else {
                     deleteFood();
                     toast({
+                      position: "top-right",
                       title: "eliminazione riuscita.",
                       description: "eliminazione Food avvenuta con successo",
                       status: "success",
@@ -261,7 +265,7 @@ const Card = (props) => {
           style={isOpen ? { display: "none" } : { display: "block" }}
         >
           <Text fontSize="xs" float="left">
-            aggiunta 7 giorni fa
+            aggiunta il {moment(el.createAt).format("DD-MM-yy")}
           </Text>
           <Text float=" right" rounded="md" px="5" bg="gray.400" color="black">
             {el.client}
